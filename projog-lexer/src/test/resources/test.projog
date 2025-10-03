@@ -1,4 +1,5 @@
-          % Comment
+
+% Comment
 % number 1.0, 1
 % constant string
 % quoted constant: "string"
@@ -7,3 +8,7 @@
 % g(B),
 % f(C),
 % f(1).
+
+fact1(atom, 'complex atom', 1.10, 1, X).
+% fact1.
+% пися попа.

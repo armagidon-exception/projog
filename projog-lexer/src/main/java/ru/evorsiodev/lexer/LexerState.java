@@ -1,10 +1,10 @@
 package ru.evorsiodev.lexer;
 
+import lombok.Getter;
+
 import java.io.BufferedReader;
-import java.io.EOFException;
 import java.io.IOException;
 import java.util.Arrays;
-import lombok.Getter;
 
 public class LexerState {
 
@@ -14,12 +14,19 @@ public class LexerState {
     private final char[] buffer = new char[BUFFER_SIZE];
     private int bufPos = -1;
     private int bufLen = 0;
-    private int peekPos = 0;
     private boolean eof = false;
+    @Getter
+    private int prevLineNumber = 0;
+    @Getter
+    private int prevColNumber = 0;
+    @Getter
     private int lineNumber = 0;
+    @Getter
     private int columnNumber = 0;
 
-    public LexerState(BufferedReader reader) {this.reader = reader;}
+    public LexerState(BufferedReader reader) {
+        this.reader = reader;
+    }
 
     public boolean fillBuffer(int ensure) throws IOException {
         int read;
@@ -59,7 +66,7 @@ public class LexerState {
                 }
                 bufLen += read;
                 return bufLen >= ensure;
-            } else {
+            } else if (ensure > 0) {
                 read = reader.read(buffer, bufLen, BUFFER_SIZE - bufLen);
                 if (read < 0) {
                     return false;
@@ -72,100 +79,90 @@ public class LexerState {
         return true;
     }
 
-    public int peekChar() {
-        if (peekPos < 0) {
+    public int peekChar() throws IOException {
+        if (isEof())
             return -1;
-        }
-
-        return buffer[peekPos];
+        return buffer[bufPos + 1];
     }
 
     public char[] peekChars(int length) throws IOException {
-        if (bufPos >= bufLen) {
-            if (!fillBuffer(length)) {
-                peekPos = -1;
-                return null;
-            }
-        } else {
-            if (bufLen - bufPos < length + 1) {
-                if (!fillBuffer(length + 1)) {
-                    peekPos = -1;
-                    return null;
-                }
-            }
-            peekPos = bufPos + 1;
+        if (!fillBuffer(length + 1)) {
+            return new char[0];
         }
-
         return Arrays.copyOfRange(buffer, bufPos + 1, bufPos + 1 + length);
     }
 
-    public void advance(int amount) {
-        bufPos += amount;
-        if (bufPos > bufLen) {
-            throw new IndexOutOfBoundsException();
-        }
+    public String peekString(int length) throws IOException {
+        return new String(peekChars(length));
     }
 
     private void doPeek() throws IOException {
-        if (bufPos >= bufLen) {
-            if (!fillBuffer(1)) {
-                peekPos = -1;
-                return;
+        if (bufLen - bufPos < 2) {
+            if (!fillBuffer(2)) {
+                eof = true;
             }
-            peekPos = bufPos;
-        } else {
-            if (bufLen - bufPos < 2) {
-                if (!fillBuffer(2)) {
-                    peekPos = -1;
-                    return;
-                }
-            }
-            peekPos = bufPos + 1;
         }
     }
 
-    public int nextChar() throws IOException {
-        if (bufPos >= bufLen) {
-            if (!fillBuffer(1)) {
-                return -1;
-            }
-            doPeek();
-            return buffer[bufPos];
-        }
-        advance(1);
-        doPeek();
+    public int currentChar() throws IOException {
+        if (bufPos < 0)
+            return -1;
         return buffer[bufPos];
     }
 
-    public String consumeString(int length) throws IOException {
-        if (!fillBuffer(length)) {
-            throw new EOFException();
-        }
 
-        String builder = String.valueOf(buffer, bufPos, length);
-        advance(length);
-        return builder;
+    public int nextChar() throws IOException {
+        if (isEof())
+            return -1;
+        bufPos++;
+        char c = handleNewChar(buffer[bufPos]);
+        doPeek();
+        return c;
     }
 
-    public int nextNonWhitespace(boolean throwOnEof) throws IOException {
-        while (peekPos >= 0) {
+    public int nextNonWhitespaceChar() throws IOException {
+        while (!isEof()) {
             int c = nextChar();
-            if (!Character.isWhitespace(c)) {
+            if (!Character.isWhitespace(c))
                 return c;
-            }
-            doPeek();
-        }
-        if (throwOnEof) {
-            throw new EOFException();
         }
         return -1;
     }
 
-    public char currentChar() {
-        return buffer[bufPos];
+    public boolean moveBeforeNonWhitespace() throws IOException {
+        if (!isEof() && !Character.isWhitespace(peekChar())) {
+            return true;
+        }
+        while (!isEof()) {
+            nextChar();
+            if (!isEof() && !Character.isWhitespace(peekChar()))
+                return true;
+        }
+
+        return false;
     }
 
-    public boolean isAtTheEnd() {
+    public boolean isEof() throws IOException {
+        doPeek();
         return eof;
+    }
+
+    public void savePos() {
+        prevColNumber = columnNumber;
+        prevLineNumber = lineNumber;
+    }
+
+    public LexerException lexerError(String message) {
+        return new LexerException(message, prevLineNumber, prevColNumber, lineNumber, columnNumber, buffer);
+    }
+
+    private char handleNewChar(char c) {
+        if (c == '\n') {
+            lineNumber++;
+            columnNumber = 0;
+        } else {
+            columnNumber++;
+        }
+        return c;
     }
 }

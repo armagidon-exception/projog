@@ -10,22 +10,14 @@ public class LexerException extends Exception {
     private final int colStart;
     private final int rowEnd;
     private final int colEnd;
+    private final char[] context;
 
-
-    public LexerException(String message, int rowStart, int colStart, int rowEnd, int colEnd) {
+    public LexerException(String message, int rowStart, int colStart, int rowEnd, int colEnd, char[] context) {
         super(message);
         this.rowStart = rowStart;
         this.colStart = colStart;
         this.rowEnd = rowEnd;
         this.colEnd = colEnd;
-    }
-
-
-    public LexerException(Throwable cause) {
-        super(cause);
-        rowStart = -1;
-        colStart = -1;
-        rowEnd = -1;
-        colEnd = -1;
+        this.context = context;
     }
 }
