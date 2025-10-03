@@ -37,9 +37,12 @@ public class Token {
         RIGHT_PAREN,
         LEFT_BRACKET,
         RIGHT_BRACKET,
+        COLON,
 
         // KEYWORDS
         IMPORT,
+        EXPORTS,
+        INLINE,
         NEW
     }
 

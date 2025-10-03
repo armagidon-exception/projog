@@ -86,6 +86,8 @@ public class LexerState {
     }
 
     public char[] peekChars(int length) throws IOException {
+        if (length == 0)
+            return new char[0];
         if (!fillBuffer(length + 1)) {
             return new char[0];
         }
@@ -93,7 +95,21 @@ public class LexerState {
     }
 
     public String peekString(int length) throws IOException {
+        if (length == 0)
+            return "";
         return new String(peekChars(length));
+    }
+
+    public String consumeString(int length) throws IOException {
+        if (length == 0)
+            return "";
+        char[] chars = peekChars(length);
+        bufPos += chars.length;
+        for (char c : chars) {
+            handleNewChar(c);
+        }
+
+        return new String(chars);
     }
 
     private void doPeek() throws IOException {

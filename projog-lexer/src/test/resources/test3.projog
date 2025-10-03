@@ -1,2 +1,2 @@
-fact1(atom, 'complex atom', 1.10, 1, X) :-
+fact1(atom, 'complex atom', 1.10, 1, X: any) :-
     f(_).
