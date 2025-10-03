@@ -1,0 +1,9 @@
+          % Comment
+% number 1.0, 1
+% constant string
+% quoted constant: "string"
+% function(A, B, C) :-
+% h(A),
+% g(B),
+% f(C),
+% f(1).

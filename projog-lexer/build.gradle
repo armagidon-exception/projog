@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+group = 'ru.evorsiodev'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    testImplementation.extendsFrom(implementation)
+    testCompileOnly.extendsFrom(compileOnly)
+    testRuntimeOnly.extendsFrom(runtimeOnly)
+    testAnnotationProccessor.extendsFrom(annotationProcessor)
+}
+
+dependencies {
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+}

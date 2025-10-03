@@ -1,0 +1,2 @@
+rootProject.name = 'Projog'
+include 'projog-lexer'
