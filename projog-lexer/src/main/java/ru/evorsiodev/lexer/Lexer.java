@@ -37,7 +37,7 @@ public class Lexer {
             .register("*", Token.Type.MULTIPLY)
             .register("/", Token.Type.DIVIDE)
             .register(".", Token.Type.TERMINATOR)
-            .register(";", Token.Type.SEMICOLUMN)
+            .register(";", Token.Type.SEMICOLON)
             .register(",", Token.Type.COMMA)
             .register("_", Token.Type.ANONYMOUS_VARIABLE)
             .register(":-", Type.IMPLICATOR)

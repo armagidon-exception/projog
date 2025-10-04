@@ -32,7 +32,7 @@ public class Token {
         IMPLICATOR,
         TERMINATOR,
         COMMA,
-        SEMICOLUMN,
+        SEMICOLON,
         LEFT_PAREN,
         RIGHT_PAREN,
         LEFT_BRACKET,
