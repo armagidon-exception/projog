@@ -38,6 +38,7 @@ public class Token {
         LEFT_BRACKET,
         RIGHT_BRACKET,
         COLON,
+        PIPE,
 
         // KEYWORDS
         IMPORT,

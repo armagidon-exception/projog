@@ -43,6 +43,7 @@ public class Lexer {
             .register(":-", Type.IMPLICATOR)
             .register("::", Type.REFERENCE)
             .register(":", Type.COLON)
+            .register("|", Type.PIPE)
             .register("import", Type.IMPORT)
             .register("new", Type.NEW)
             .register("exports", Type.EXPORTS)
