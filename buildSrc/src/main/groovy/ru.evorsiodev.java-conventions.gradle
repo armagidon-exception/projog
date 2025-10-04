@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    testImplementation.extendsFrom(implementation)
+    testCompileOnly.extendsFrom(compileOnly)
+    testRuntimeOnly.extendsFrom(runtimeOnly)
+    testAnnotationProccessor.extendsFrom(annotationProcessor)
+}
+
+dependencies {
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
+
+    testImplementation 'com.google.code.gson:gson:2.13.2'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+tasks.named("jar", Jar) {
+    archiveBaseName = "${project.name.toLowerCase()}"
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        showStandardStreams = true
+    }
+}

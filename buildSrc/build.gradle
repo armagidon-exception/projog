@@ -1,0 +1,8 @@
+plugins {
+    id 'groovy'
+    id 'groovy-gradle-plugin'
+}
+
+repositories {
+    gradlePluginPortal()
+}
