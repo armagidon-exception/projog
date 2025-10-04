@@ -1,2 +1,24 @@
+plugins {
+    id 'ru.evorsiodev.java-conventions'
+    id 'application'
+}
+
 group = 'ru.evorsiodev'
 version = '1.0.0'
+
+dependencies {
+    implementation(projects.projogLexer)
+    implementation(projects.projogParser)
+    implementation 'io.github.revxrsal:lamp.common:4.0.0-rc.13'
+    implementation 'io.github.revxrsal:lamp.cli:4.0.0-rc.13'
+    implementation 'org.slf4j:slf4j-simple:2.0.17'
+    implementation 'com.google.code.gson:gson:2.13.2'
+}
+
+application {
+    mainClass = "ru.evorsiodev.Main"
+}
+
+compileJava {
+    options.compilerArgs += ['-parameters']
+}
