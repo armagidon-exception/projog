@@ -1,3 +1,4 @@
 rootProject.name = 'Projog'
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include 'projog-lexer'
+include 'projog-parser'

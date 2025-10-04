@@ -1,0 +1,10 @@
+declare undeterm f(X: any, Y:any, Z:any) {
+    default :-
+        a(X), b(X), c(X).
+}
+
+f(X:any, Y:any, Z:any):-
+    ...
+
+f(10, Y, 'abc'):-
+    ...
