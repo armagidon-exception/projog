@@ -10,7 +10,7 @@ public class Main {
         var lamp = CLILamp.builder()
                 .build();
         lamp.register(new LexerCommand());
-        /* register all other commands here */
+        lamp.register(new ParserCommand());
 
         ConsoleActor actor = ActorFactory.defaultFactory().createForStdIo(lamp);
         lamp.dispatch(actor, String.join(" ", args));

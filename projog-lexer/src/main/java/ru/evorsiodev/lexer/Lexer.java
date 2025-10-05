@@ -50,8 +50,11 @@ public class Lexer {
             .register("|", TokenType.PIPE)
             .register("#", TokenType.HASH)
             .register("as", TokenType.AS)
-            .register("fail", TokenType.FAIL)
+            .register("procedure", TokenType.PROCEDURE)
             .register("export", TokenType.EXPORT)
+            .register("package", TokenType.PACKAGE)
+            .register("domdef", TokenType.DOMAIN_DEFINE)
+            .register("domimport", TokenType.DOMAIN_IMPORT)
             .build();
 
         RULES = List.of(KEYWORDS, STRINGS, QUOTED_STRINGS, NUMBERS, COMMENTS);
