@@ -37,6 +37,9 @@ public enum TokenType {
 
     // KEYWORDS
     AS,
-    FAIL,
-    EXPORT
+    PROCEDURE,
+    EXPORT,
+    PACKAGE,
+    DOMAIN_IMPORT,
+    DOMAIN_DEFINE
 }
