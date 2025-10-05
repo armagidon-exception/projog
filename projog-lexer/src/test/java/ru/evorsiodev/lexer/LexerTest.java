@@ -77,6 +77,29 @@ class LexerTest {
         assertEquals(2, tokens.size());
         assertSame(TokenType.IMPLICATOR, tokens.getFirst().getType());
         assertSame(TokenType.COLON, tokens.getLast().getType());
+
+        input = ">=";
+        tokens = lexHelper(lexer, input);
+        assertEquals(1, tokens.size());
+        assertSame(TokenType.GREATER_THAN_OR_EQUALS, tokens.getFirst().getType());
+
+        input = "<=";
+        tokens = lexHelper(lexer, input);
+        assertEquals(1, tokens.size());
+        assertSame(TokenType.LESS_THAN_OR_EQUALS, tokens.getFirst().getType());
+
+
+        input = "<==";
+        tokens = lexHelper(lexer, input);
+        assertEquals(2, tokens.size());
+        assertSame(TokenType.LESS_THAN_OR_EQUALS, tokens.getFirst().getType());
+        assertSame(TokenType.UNIFY, tokens.getLast().getType());
+
+        input = ">==";
+        tokens = lexHelper(lexer, input);
+        assertEquals(2, tokens.size());
+        assertSame(TokenType.GREATER_THAN_OR_EQUALS, tokens.getFirst().getType());
+        assertSame(TokenType.UNIFY, tokens.getLast().getType());
     }
 
     private List<Token> lexHelper(Lexer lexer, String input) {

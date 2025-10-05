@@ -15,6 +15,12 @@ public enum TokenType {
     DIVIDE,
     REFERENCE,
     CUT,
+    LESS_THAN,
+    GREATER_THAN,
+    GREATER_THAN_OR_EQUALS,
+    LESS_THAN_OR_EQUALS,
+    NEGATE,
+    UNIFY,
 
     // PUNCTUATION
     IMPLICATOR,
@@ -31,5 +37,6 @@ public enum TokenType {
 
     // KEYWORDS
     AS,
-    FAIL
+    FAIL,
+    EXPORT
 }

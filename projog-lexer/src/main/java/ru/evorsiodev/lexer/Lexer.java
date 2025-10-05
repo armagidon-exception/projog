@@ -34,6 +34,12 @@ public class Lexer {
             .register("-", TokenType.MINUS)
             .register("*", TokenType.MULTIPLY)
             .register("/", TokenType.DIVIDE)
+            .register("<", TokenType.LESS_THAN)
+            .register(">", TokenType.GREATER_THAN)
+            .register(">=", TokenType.GREATER_THAN_OR_EQUALS)
+            .register("<=", TokenType.LESS_THAN_OR_EQUALS)
+            .register("\\+", TokenType.NEGATE)
+            .register("=", TokenType.UNIFY)
             .register(".", TokenType.TERMINATOR)
             .register(";", TokenType.SEMICOLON)
             .register(",", TokenType.COMMA)
@@ -45,6 +51,7 @@ public class Lexer {
             .register("#", TokenType.HASH)
             .register("as", TokenType.AS)
             .register("fail", TokenType.FAIL)
+            .register("export", TokenType.EXPORT)
             .build();
 
         RULES = List.of(KEYWORDS, STRINGS, QUOTED_STRINGS, NUMBERS, COMMENTS);
