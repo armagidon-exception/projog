@@ -1,10 +1,117 @@
-declare undeterm f(X: any, Y:any, Z:any) {
-    default :-
-        a(X), b(X), c(X).
-}
+% Projog design
+% Criteria that it must adhere to:
+% 1. Declarations must be as close to definitions.
+% 2. Variables are be typed.
+% 3. Predicate signature depends on types of variables.
+% 4. Type casts are possible
+% 5. No matter the stream configuration of exported method, fact record must have all items of predicate signature.
+% 6. Only user-defined predicates can be generated.
 
-f(X:any, Y:any, Z:any):-
-    ...
+% f(X:any, Y: any, Z:any) :-
+%     a(X, Y, Z).
 
-f(10, Y, 'abc'):-
-    ...
+bebra
+
+% f/3(any, any, any)
+
+% f(10, Y: any, abc) :-
+%     b(10, Y, abc).
+
+% f(20, Y: any, abc) :-
+%     b(10, Y, abc).
+
+% f/3(int, any, string).
+
+% f(10, Y: int, 'abc') :-
+%   c(10, Y, 'abc').
+
+% f/3(int, int, string)
+
+% ?- f(10, 10, 'abc').
+% private static boolean f(int _X, int _Y, String _Z) {
+%   if (_X == 10 && _Z == "abc") {
+%     if (c(_X, _Y, _Z)) {
+%       return true;
+%     } else {
+%       return false;
+%     }
+%   } else {
+%     return false;
+%   }
+% }
+% f(10, 10, "abc");
+
+% ?- f(10, 10 as any, 'abc')
+% private static boolean f(int _X, Object _Y, int _Z) {
+%   if (_X == 10) {
+%     ...
+%   }
+% }
+% f(10, (Object) 10, "abc");
+
+% export f(X: int, Y: Object, Z: int).
+% public static boolean f(int X, Object Y, int Z).
+
+% Compilation flowchart
+% 1. Find exports
+% 2. Find exported predicates
+% 3. Find dependent predicates
+% 3.1. If none found go to step 6
+% 3.2. Otherwise go to step 4
+% 4. Figure out their stream modes
+% 5. Go to step 3
+% 6. Compile predicate
+
+
+
+% Output
+% object/2(String)
+% public record ObjectTuple(String X) {}
+% private record check_1234234(String X) {}
+% public record PredicateOutput(String output) {}
+%
+% public static ObjectTuple object() {
+%   if (X.equals("object")) {
+%     return new ObjectTuple("object");
+%   } else if (X.equals("bobject")) {
+%     return new ObjectTuple("bobject");
+%   } else {
+%     return new ObjectTuple();
+%   }
+% }
+%
+% public static PredicateOutput predicate() {
+% }
+
+% Steps to determine if variable is already unified or not.
+% 0. We can use bound variables ONLY as input!
+% We can use unbound variables ONLY as output!
+% When we enter predicates body, we store boundness of argument variables.
+
+% 1. If variable was already used in another predicate it is unified:
+% If we pass a variable as an input to the predicate, it is already bound.
+% If variable is used to store an output of the predicate, it will be bound by the predicate.
+
+% What if predicate does not support unbound variables like +/2.
+% Then we do not generate methods for it and show error that method with that signature was not found.
+% +/2 is builtin predicate and cannot be generated. Only user-defined predicates are generated.
+
+
+
+% Example
+or(0, 0, 0).
+or(1, 0, 1).
+or(0, 1, 1).
+or(1, 1, 1).
+
+check(R: int) :-
+  or(_, _, R).
+
+main(Args: String[]) :-
+  check(2).
+
+main(Args: String[]) :-
+  check(0).
+
+export check(result: int).
+export procedure main(args: String[]).
