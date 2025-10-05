@@ -5,16 +5,17 @@ import ru.evorsiodev.lexer.LexerState;
 import ru.evorsiodev.lexer.Token;
 
 import java.io.IOException;
+import ru.evorsiodev.lexer.TokenType;
 
-public class QuotedAtomRule implements Rule {
+public class QuotedStringRule implements Rule {
 
-    private static final char ATOM_SEPARATOR = '\'';
+    private static final char QUOTE_CHAR = '\"';
 
     @Override
     public boolean matches(CharSequence buffer, LexerState state) {
         if (buffer.isEmpty())
             return false;
-        return buffer.charAt(0) == ATOM_SEPARATOR;
+        return buffer.charAt(0) == QUOTE_CHAR;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class QuotedAtomRule implements Rule {
                         throw state.lexerError("Unknown escape sequence!");
                     builder.append((char) next);
                     i += 2;
-                } else if (c == ATOM_SEPARATOR) {
+                } else if (c == QUOTE_CHAR) {
                     break;
                 } else {
                     builder.append(c);
@@ -59,7 +60,7 @@ public class QuotedAtomRule implements Rule {
                     if (next == -1)
                         throw state.lexerError("Unknown escape sequence!");
                     builder.append((char) next);
-                } else if (c == ATOM_SEPARATOR) {
+                } else if (c == QUOTE_CHAR) {
                     break;
                 } else {
                     builder.append(c);
@@ -68,7 +69,7 @@ public class QuotedAtomRule implements Rule {
         }
 
         return new Token(builder.toString(),
-                Token.Type.ATOM,
+                TokenType.QUOTED_STRING,
                 state.getPrevLineNumber(),
                 state.getPrevColNumber(),
                 state.getLineNumber(), state.getColumnNumber());

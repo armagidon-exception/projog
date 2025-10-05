@@ -9,14 +9,14 @@ import lombok.SneakyThrows;
 import ru.evorsiodev.lexer.LexerException;
 import ru.evorsiodev.lexer.LexerState;
 import ru.evorsiodev.lexer.Token;
-import ru.evorsiodev.lexer.Token.Type;
+import ru.evorsiodev.lexer.TokenType;
 
 public class GreedyRule implements Rule {
 
-    private final Map<String, Type> tokens;
+    private final Map<String, TokenType> tokens;
     private final List<String> sortedTokens;
 
-    public GreedyRule(Map<String, Type> tokens) {
+    public GreedyRule(Map<String, TokenType> tokens) {
         this.tokens = tokens;
 
         sortedTokens = tokens.keySet().stream()
@@ -82,9 +82,9 @@ public class GreedyRule implements Rule {
     }
 
     public static final class Builder {
-        private final Map<String, Type> tokens = new HashMap<>();
+        private final Map<String, TokenType> tokens = new HashMap<>();
 
-        public Builder register(String token, Type type) {
+        public Builder register(String token, TokenType type) {
             tokens.put(token, type);
             return this;
         }

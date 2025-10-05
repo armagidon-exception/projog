@@ -5,6 +5,7 @@ import ru.evorsiodev.lexer.LexerState;
 import ru.evorsiodev.lexer.Token;
 
 import java.io.IOException;
+import ru.evorsiodev.lexer.TokenType;
 
 public class NumberRule implements Rule {
 
@@ -74,7 +75,7 @@ public class NumberRule implements Rule {
             }
         }
 
-        return new Token(builder.toString(), Token.Type.NUMBER,
+        return new Token(builder.toString(), TokenType.NUMBER,
                 state.getPrevLineNumber(),
                 state.getPrevColNumber(),
                 state.getLineNumber(),

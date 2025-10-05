@@ -5,6 +5,7 @@ import ru.evorsiodev.lexer.LexerState;
 import ru.evorsiodev.lexer.Token;
 
 import java.io.IOException;
+import ru.evorsiodev.lexer.TokenType;
 
 public class CommentRule implements Rule {
 
@@ -30,7 +31,7 @@ public class CommentRule implements Rule {
         }
 
         return new Token(builder.toString(),
-                Token.Type.COMMENT,
+                TokenType.COMMENT,
                 state.getPrevLineNumber(),
                 state.getPrevColNumber(),
                 state.getLineNumber(), state.getColumnNumber());

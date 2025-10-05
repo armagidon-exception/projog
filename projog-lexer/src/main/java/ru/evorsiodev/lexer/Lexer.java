@@ -5,14 +5,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import ru.evorsiodev.lexer.Token.Type;
-import ru.evorsiodev.lexer.node.AtomRule;
 import ru.evorsiodev.lexer.node.CommentRule;
 import ru.evorsiodev.lexer.node.GreedyRule;
 import ru.evorsiodev.lexer.node.NumberRule;
-import ru.evorsiodev.lexer.node.QuotedAtomRule;
+import ru.evorsiodev.lexer.node.QuotedStringRule;
 import ru.evorsiodev.lexer.node.Rule;
-import ru.evorsiodev.lexer.node.VariableRule;
+import ru.evorsiodev.lexer.node.StringRule;
 
 public class Lexer {
 
@@ -20,46 +18,40 @@ public class Lexer {
 
     private static final Rule KEYWORDS;
     private static final Rule COMMENTS = new CommentRule();
-    private static final Rule ATOMS = new AtomRule();
-    private static final Rule QUOTED_ATOMS = new QuotedAtomRule();
+    private static final Rule STRINGS = new StringRule();
+    private static final Rule QUOTED_STRINGS = new QuotedStringRule();
     private static final Rule NUMBERS = new NumberRule();
-    private static final Rule VARIABLES = new VariableRule();
+//    private static final Rule VARIABLES = new VariableRule();
 
     static {
         KEYWORDS = GreedyRule.builder()
-            .register("(", Type.LEFT_PAREN)
-            .register(")", Token.Type.RIGHT_PAREN)
-            .register("]", Token.Type.RIGHT_BRACKET)
-            .register("[", Token.Type.LEFT_BRACKET)
-            .register("!", Token.Type.CUT)
-            .register("+", Token.Type.PLUS)
-            .register("-", Token.Type.MINUS)
-            .register("*", Token.Type.MULTIPLY)
-            .register("/", Token.Type.DIVIDE)
-            .register(".", Token.Type.TERMINATOR)
-            .register(";", Token.Type.SEMICOLON)
-            .register(",", Token.Type.COMMA)
-            .register("_", Token.Type.ANONYMOUS_VARIABLE)
-            .register(":-", Type.IMPLICATOR)
-            .register("::", Type.REFERENCE)
-            .register(":", Type.COLON)
-            .register("|", Type.PIPE)
-            .register("import", Type.IMPORT)
-            .register("new", Type.NEW)
-            .register("exports", Type.EXPORTS)
-            .register("inline", Type.INLINE)
+            .register("(", TokenType.LEFT_PAREN)
+            .register(")", TokenType.RIGHT_PAREN)
+            .register("]", TokenType.RIGHT_BRACKET)
+            .register("[", TokenType.LEFT_BRACKET)
+            .register("!", TokenType.CUT)
+            .register("+", TokenType.PLUS)
+            .register("-", TokenType.MINUS)
+            .register("*", TokenType.MULTIPLY)
+            .register("/", TokenType.DIVIDE)
+            .register(".", TokenType.TERMINATOR)
+            .register(";", TokenType.SEMICOLON)
+            .register(",", TokenType.COMMA)
+            .register("_", TokenType.ANONYMOUS_VARIABLE)
+            .register(":-", TokenType.IMPLICATOR)
+            .register("::", TokenType.REFERENCE)
+            .register(":", TokenType.COLON)
+            .register("|", TokenType.PIPE)
+            .register("#", TokenType.HASH)
+            .register("as", TokenType.AS)
+            .register("fail", TokenType.FAIL)
             .build();
 
-        RULES = List.of(KEYWORDS, ATOMS, QUOTED_ATOMS, VARIABLES, NUMBERS, COMMENTS);
+        RULES = List.of(KEYWORDS, STRINGS, QUOTED_STRINGS, NUMBERS, COMMENTS);
     }
 
-    private final LexerState state;
-
-    public Lexer(Reader reader) {
-        state = new LexerState(new BufferedReader(reader));
-    }
-
-    public List<Token> lex() throws LexerException, IOException {
+    public List<Token> lex(Reader reader) throws LexerException, IOException {
+        LexerState state = new LexerState(new BufferedReader(reader));
         List<Token> output = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         while (state.moveBeforeNonWhitespace()) {

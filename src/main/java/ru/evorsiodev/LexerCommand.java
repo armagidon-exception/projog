@@ -27,9 +27,9 @@ public class LexerCommand {
             }
 
 
-            Lexer lexer = new Lexer(reader);
+            Lexer lexer = new Lexer();
             Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-            System.out.println(gson.toJson(lexer.lex()));
+            System.out.println(gson.toJson(lexer.lex(reader)));
         } catch (LexerException e) {
             log.error("Lexer error on line {}: {}", e.getRowStart(), e.getLocalizedMessage());
         } finally {

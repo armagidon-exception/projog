@@ -1,4 +1,4 @@
-package ru.evorsiodev.lexer.test;
+package test;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,10 +17,10 @@ public class TestApplication {
         assert input != null;
         var reader = new InputStreamReader(input);
 
-        Lexer lexer = new Lexer(reader);
+        Lexer lexer = new Lexer();
         List<Token> output;
         try {
-            output = lexer.lex();
+            output = lexer.lex(reader);
         } finally {
             reader.close();
         }
