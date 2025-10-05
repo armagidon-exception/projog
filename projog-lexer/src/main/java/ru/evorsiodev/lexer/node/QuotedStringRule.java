@@ -27,6 +27,7 @@ public class QuotedStringRule implements Rule {
     public Token collect(CharSequence buffer, LexerState state) throws IOException, LexerException {
         StringBuilder builder = new StringBuilder();
         int i = 1;
+        boolean terminated = false;
         while (i < buffer.length() || !state.isEof()) {
             if (i < buffer.length()) {
                 char c = buffer.charAt(i);
@@ -45,6 +46,7 @@ public class QuotedStringRule implements Rule {
                     builder.append((char) next);
                     i += 2;
                 } else if (c == QUOTE_CHAR) {
+                    terminated = true;
                     break;
                 } else {
                     builder.append(c);
@@ -61,11 +63,15 @@ public class QuotedStringRule implements Rule {
                         throw state.lexerError("Unknown escape sequence!");
                     builder.append((char) next);
                 } else if (c == QUOTE_CHAR) {
+                    terminated = true;
                     break;
                 } else {
                     builder.append(c);
                 }
             }
+        }
+        if (!terminated) {
+            throw state.lexerError("Unterminated string");
         }
 
         return new Token(builder.toString(),
